@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Class Counter</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f3f3f3;
+        }
+
+        .header {
+            background-color: #2a3f7f;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 20px;
+            padding: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 15px;
+        }
+
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-gap: 20px;
+            padding: 0 30px 30px 30px;
+        }
+
+        .video-feed {
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f7f7f7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        SMART CLASS COUNTER SYSTEM
+    </div>
+
+    <div class="dashboard">
+        <!-- Movement Rate Graph -->
+        <div class="card">
+            <h3>Movement Rate</h3>
+            <img src="{{ url_for('plot_move_rate') }}" width="100%" />
+        </div>
+    
+        <!-- People Count Bar Chart -->
+        <div class="card">
+            <h3>People Count</h3>
+            <img src="{{ url_for('plot_people_count') }}" width="100%" />
+        </div>
+    </div>
+    
+
+    <!-- ... Header และกราฟเหมือนเดิม -->
+
+    <div class="bottom-section">
+        <!-- Live Video Feed -->
+        <div class="card">
+            <h3>Live Video Analysis</h3>
+            {% if video_url %}
+            <video class="video-feed" controls autoplay muted>
+                <source src="{{ video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p><strong>Timestamp of Video:</strong> {{ data[0].video_timestamp }}</p> <!-- แสดง Timestamp -->
+            {% else %}
+            <p>No video available.</p>
+            {% endif %}
+        </div>
+    
+        <!-- People Count Table -->
+        <div class="card">
+            <h3>People Count Data</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>People Count</th>
+                        <th>Move Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row.timestamp }}</td>
+                        <td>{{ row.num_people }}</td>
+                        <td>{{ row.move_rate }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>       
+</body>
+</html>
+
